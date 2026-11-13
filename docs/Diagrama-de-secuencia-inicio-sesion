@@ -1,0 +1,35 @@
+@startuml
+title DS-01 - Inicio de sesion y acceso por rol
+
+actor Usuario
+boundary "paginas/login.html" as UI
+participant "js/autenticacion.js" as Auth
+participant "js/api.js" as APIJS
+control "Express" as Express
+participant "usuarioRutas.js" as Rutas
+participant "usuarioControlador.js" as Controlador
+database "Usuario.js / MongoDB" as BD
+
+Usuario -> UI : Ingresar correo y contraseña
+UI -> Auth : Enviar credenciales
+Auth -> APIJS : Solicitar inicio de sesion
+APIJS -> Express : POST /api/usuarios/login
+Express -> Rutas : Enrutar solicitud
+Rutas -> Controlador : Iniciar sesion
+Controlador -> BD : Buscar usuario por correo
+BD --> Controlador : Datos del usuario
+
+alt Credenciales validas y usuario activo
+    Controlador -> Controlador : Verificar contraseña
+    Controlador --> APIJS : Respuesta de autenticacion y rol
+    APIJS --> Auth : Inicio de sesion exitoso
+    Auth --> UI : Guardar estado de sesion
+    UI --> Usuario : Mostrar interfaz segun rol
+else Credenciales invalidas o usuario inactivo
+    Controlador --> APIJS : Error de autenticacion
+    APIJS --> Auth : Inicio de sesion fallido
+    Auth --> UI : Mostrar mensaje de error
+    UI --> Usuario : Solicitar correccion
+end
+
+@enduml
