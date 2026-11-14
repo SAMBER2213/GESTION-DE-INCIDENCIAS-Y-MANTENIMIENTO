@@ -1,0 +1,44 @@
+@startuml
+title DS-05 - Actualizar y cerrar incidencia
+
+actor Tecnico
+boundary "paginas/incidencias.html" as UI
+participant "js/api.js" as APIJS
+control "Express" as Express
+participant "incidenciaRutas.js" as Rutas
+participant "subidaArchivos.js" as Archivos
+participant "incidenciaControlador.js" as Controlador
+database "Incidencia.js / MongoDB" as BD
+
+Tecnico -> UI : Seleccionar incidencia asignada
+UI -> APIJS : Enviar nuevo estado
+APIJS -> Express : PATCH /api/incidencias/{id}
+Express -> Rutas : Enrutar solicitud
+Rutas -> Controlador : Verificar y actualizar incidencia
+Controlador -> BD : Consultar incidencia
+BD --> Controlador : Datos y responsable asignado
+
+alt Tecnico autorizado
+    alt Estado solicitado es Solucionado
+        Controlador -> Archivos : Verificar fotos antes y despues
+        Archivos --> Controlador : Resultado de validacion
+        alt Ambas evidencias disponibles
+            Controlador -> BD : Guardar estado y evidencias
+            BD --> Controlador : Actualizacion confirmada
+            Controlador --> APIJS : Incidencia cerrada
+        else Faltan evidencias
+            Controlador --> APIJS : Rechazar cierre
+        end
+    else Estado Pendiente o En proceso
+        Controlador -> BD : Actualizar estado
+        BD --> Controlador : Estado actualizado
+        Controlador --> APIJS : Confirmar actualizacion
+    end
+else Tecnico no autorizado
+    Controlador --> APIJS : Acceso denegado
+end
+
+APIJS --> UI : Mostrar resultado
+UI --> Tecnico : Confirmar cambio o mostrar error
+
+@enduml
