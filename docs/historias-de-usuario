@@ -1,164 +1,298 @@
-HISTORIAS DE USUARIO
-Gestión de Incidencias y Mantenimiento
-Roles: Residente, Técnico y Administrador. Cada historia indica los requerimientos funcionales (RF) de los que proviene.
-Épica 1: Gestión de incidencias
+# Historias de Usuario - Gestión de Incidencias y Mantenimiento
 
-HU-01: Reportar una incidencia (RF-01, RF-02)
-Como residente, quiero reportar un daño con descripción, tipo, ubicación, prioridad y fotos, para que la administración se entere y lo repare.
-Criterios de aceptación:
-Puedo indicar título, descripción, tipo, ubicación y prioridad.
-Puedo adjuntar una o varias fotos.
-Al enviar veo un mensaje de confirmación.
-La incidencia queda en estado Pendiente.
+Sistema de gestión para copropiedades que integra tres roles principales: **Residente**, **Técnico** y **Administrador**. Cada historia está vinculada a sus respectivos Requerimientos Funcionales (RF).
 
-HU-02: Recibir aviso de nuevas incidencias (RF-03)
-Como administrador, quiero recibir una notificación cuando se crea una incidencia, para atenderla sin demora.
-Criterios de aceptación:
-Al crearse una incidencia se envía un correo al administrador.
-El correo indica título, ubicación y prioridad.
+---
 
-HU-03: Asignar una incidencia a un técnico (RF-04, RF-05)
-Como administrador, quiero asignar una incidencia a un técnico, para que la persona indicada la repare.
-Criterios de aceptación:
-Puedo elegir un técnico de la lista de técnicos activos.
-El técnico recibe una notificación de la asignación.
-La incidencia muestra el técnico asignado.
+## Tabla de Contenidos
+* [Épica 1: Gestión de incidencias](#épica-1-gestión-de-incidencias)
+* [Épica 2: Proveedores y contratistas](#épica-2-proveedores-y-contratistas)
+* [Épica 3: Comunicación y transparencia](#épica-3-comunicación-y-transparencia)
+* [Épica 4: Análisis de datos y presupuestos](#épica-4-análisis-de-datos-y-presupuestos)
+* [Épica 5: Usuarios y acceso](#épica-5-usuarios-y-acceso)
 
-HU-04: Consultar el estado de mis reportes (RF-06)
-Como residente, quiero ver si mi incidencia está Pendiente, En proceso o Solucionado, para saber si ya la están atendiendo.
-Criterios de aceptación:
-Veo solo las incidencias que yo reporté.
-Cada incidencia muestra su estado actual.
-Puedo filtrar por estado.
+---
 
-HU-05: Actualizar el estado de una incidencia (RF-07)
-Como técnico, quiero cambiar el estado de las incidencias que tengo asignadas, para mantener informado al residente y a la administración.
-Criterios de aceptación:
-Solo veo y modifico las incidencias asignadas a mí.
-Puedo pasar la incidencia a En proceso.
-El cambio queda registrado con fecha.
+## Épica 1: Gestión de incidencias
 
-HU-06: Listar y filtrar todas las incidencias (RF-08)
-Como administrador, quiero ver todas las incidencias y filtrarlas por estado, tipo, prioridad y ubicación, para tener control de lo que está pendiente.
-Criterios de aceptación:
-El listado muestra todas las incidencias de la copropiedad.
-Puedo combinar varios filtros.
-El listado se muestra paginado.
+### HU-01: Reportar una incidencia (`RF-01`, `RF-02`)
+> **Como** residente,  
+> **quiero** reportar un daño con descripción, tipo, ubicación, prioridad y fotos,  
+> **para que** la administración se entere y lo repare.
 
-HU-07: Cerrar una incidencia con evidencia (RF-10)
-Como técnico, quiero subir la foto del antes y del después al terminar un trabajo, para dejar evidencia y cerrar formalmente el reporte.
-Criterios de aceptación:
-No puedo marcar la incidencia como Solucionado sin las dos fotos.
-Puedo registrar un resumen de la reparación.
-La incidencia queda con fecha de solución.
+**Criterios de aceptación:**
+* Puedo indicar título, descripción, tipo, ubicación y prioridad.
+* Puedo adjuntar una o varias fotos.
+* Al enviar veo un mensaje de confirmación.
+* La incidencia queda en estado **Pendiente**.
 
-HU-08: Consultar el historial de reparaciones (RF-09)
-Como administrador, quiero consultar qué se dañó, cuándo se arregló, quién lo hizo y cuánto costó, para tener un registro de las reparaciones.
-Criterios de aceptación:
-Puedo filtrar por fechas, tipo, ubicación y responsable.
-Cada registro muestra daño, fechas, responsable y costo.
-Épica 2: Proveedores y contratistas
+---
 
-HU-09: Gestionar proveedores (RF-11)
-Como administrador, quiero registrar, editar y consultar proveedores y contratistas, para tener sus datos organizados.
-Criterios de aceptación:
-Puedo registrar nombre, especialidad, teléfono y correo.
-Puedo editar o desactivar un proveedor.
-Puedo filtrar la lista por especialidad.
+### HU-02: Recibir aviso de nuevas incidencias (`RF-03`)
+> **Como** administrador,  
+> **quiero** recibir una notificación cuando se crea una incidencia,  
+> **para que** pueda atenderla sin demora.
 
-HU-10: Cargar documentos de seguridad social (RF-13)
-Como administrador, quiero guardar los documentos de ARL y EPS de cada técnico, para verificar que pueda ingresar a trabajar.
-Criterios de aceptación:
-Puedo cargar el documento con su fecha de vencimiento.
-El sistema indica si el documento está vigente.
+**Criterios de aceptación:**
+* Al crearse una incidencia se envía un correo al administrador.
+* El correo indica título, ubicación y prioridad.
 
-HU-11: Generar órdenes de servicio (RF-12, RF-14)
-Como administrador, quiero generar una orden de servicio con las tareas que debe realizar el proveedor, para que el trabajo quede claro y documentado.
-Criterios de aceptación:
-La orden incluye proveedor, incidencia y lista de tareas.
-No puedo generar la orden si el proveedor no tiene ARL y EPS vigentes.
+---
 
-HU-12: Calificar a un proveedor (RF-15)
-Como administrador, quiero calificar la calidad, el cumplimiento de tiempos y el respeto del presupuesto, para evaluar a los proveedores con criterios claros.
-Criterios de aceptación:
-Puedo calificar los tres criterios.
-Puedo agregar un comentario.
-Se actualiza la calificación promedio del proveedor.
+### HU-03: Asignar una incidencia a un técnico (`RF-04`, `RF-05`)
+> **Como** administrador,  
+> **quiero** asignar una incidencia a un técnico,  
+> **para que** la persona indicada la repare.
 
-HU-13: Consultar el historial de un proveedor (RF-16)
-Como administrador, quiero ver las órdenes de servicio y calificaciones de un proveedor, para decidir si lo vuelvo a contratar.
-Criterios de aceptación:
-Veo la lista de órdenes con fecha y tareas.
-Veo todas las calificaciones recibidas.
-Épica 3: Comunicación y transparencia
+**Criterios de aceptación:**
+* Puedo elegir un técnico de la lista de técnicos activos.
+* El técnico recibe una notificación de la asignación.
+* La incidencia muestra el técnico asignado.
 
-HU-14: Publicar avisos para la comunidad (RF-17, RF-18)
-Como administrador, quiero publicar avisos como cortes de agua o mantenimiento de tanques, para que los residentes estén informados.
-Criterios de aceptación:
-Puedo escribir título, contenido y fecha del aviso.
-Al publicarlo se envía un correo a todos los residentes.
+---
 
-HU-15: Consultar avisos (RF-19)
-Como residente, quiero ver los avisos vigentes y anteriores, para enterarme de lo que ocurre en la copropiedad.
-Criterios de aceptación:
-Veo los avisos ordenados del más reciente al más antiguo.
-Puedo distinguir los vigentes de los anteriores.
+### HU-04: Consultar el estado de mis reportes (`RF-06`)
+> **Como** residente,  
+> **quiero** ver si mi incidencia está Pendiente, En proceso o Solucionado,  
+> **para que** pueda saber si ya la están atendiendo.
 
-HU-16: Ver la evidencia de mis incidencias cerradas (RF-20)
-Como residente, quiero ver las fotos del antes y del después de mi incidencia, para comprobar que el trabajo se realizó.
-Criterios de aceptación:
-Solo veo la evidencia de las incidencias que yo reporté.
-El administrador puede ver la evidencia de todas.
-Épica 4: Análisis de datos y presupuestos
+**Criterios de aceptación:**
+* Veo solo las incidencias que yo reporté.
+* Cada incidencia muestra su estado actual.
+* Puedo filtrar por estado.
 
-HU-17: Registrar gastos de una reparación (RF-21)
-Como administrador, quiero registrar el costo de repuestos y mano de obra de cada reparación, para controlar lo que gasta la copropiedad.
-Criterios de aceptación:
-El gasto queda asociado a una incidencia.
-Puedo separar repuestos y mano de obra.
-El costo total se calcula automáticamente.
+---
 
-HU-18: Definir el presupuesto anual (RF-22)
-Como administrador, quiero definir el presupuesto anual de mantenimiento, para tener un límite contra el cual comparar los gastos.
-Criterios de aceptación:
-Puedo definir un monto por año.
-Puedo modificarlo durante el año.
+### HU-05: Actualizar el estado de una incidencia (`RF-07`)
+> **Como** técnico,  
+> **quiero** cambiar el estado de las incidencias que tengo asignadas,  
+> **para que** se mantenga informado al residente y a la administración.
 
-HU-19: Ver estadísticas de incidencias (RF-23)
-Como administrador, quiero ver la cantidad de incidencias por tipo, ubicación y estado, para entender dónde están los problemas.
-Criterios de aceptación:
-El dashboard muestra los tres tipos de agrupación.
-Puedo elegir el rango de fechas.
+**Criterios de aceptación:**
+* Solo veo y modifico las incidencias asignadas a mí.
+* Puedo pasar la incidencia a **En proceso**.
+* El cambio queda registrado con fecha.
 
-HU-20: Comparar la frecuencia de daños entre zonas (RF-24)
-Como administrador, quiero comparar cuántos daños tiene cada zona, por ejemplo la Torre A y la Torre B, para decidir si conviene reparar o cambiar un equipo.
-Criterios de aceptación:
-Puedo comparar dos o más zonas.
-El resultado se muestra en una tabla o gráfica.
+---
 
-HU-21: Comparar gastos con el presupuesto (RF-25)
-Como administrador, quiero ver los gastos acumulados frente al presupuesto anual, para saber cuánto presupuesto queda disponible.
-Criterios de aceptación:
-Veo el gasto acumulado, el presupuesto y la diferencia.
-Se muestra el porcentaje del presupuesto utilizado.
-Épica 5: Usuarios y acceso
+### HU-06: Listar y filtrar todas las incidencias (`RF-08`)
+> **Como** administrador,  
+> **quiero** ver todas las incidencias y filtrarlas por estado, tipo, prioridad y ubicación,  
+> **para que** tenga control de lo que está pendiente.
 
-HU-22: Iniciar y cerrar sesión (RF-26)
-Como usuario, quiero iniciar sesión con mi correo y contraseña, y cerrarla cuando termine, para acceder a mis funciones de forma segura.
-Criterios de aceptación:
-Con credenciales válidas entro a la interfaz de mi rol.
-Con credenciales inválidas veo un mensaje de error.
-Un usuario inactivo no puede iniciar sesión.
+**Criterios de aceptación:**
+* El listado muestra todas las incidencias de la copropiedad.
+* Puedo combinar varios filtros.
+* El listado se muestra paginado.
 
-HU-23: Gestionar usuarios y roles (RF-27)
-Como administrador, quiero crear, editar y desactivar usuarios y asignarles un rol, para controlar quién usa el sistema.
-Criterios de aceptación:
-Puedo asignar el rol Residente, Técnico o Administrador.
-Al desactivar un usuario no se borra su historial.
+---
 
-HU-24: Restringir funciones según el rol (RF-28)
-Como administrador, quiero que cada usuario solo acceda a las funciones de su rol, para proteger la información del sistema.
-Criterios de aceptación:
-Un residente no puede ver el dashboard.
-Un técnico solo ve las incidencias asignadas a él.
-Si el rol no corresponde, el sistema muestra un error de permisos.
+### HU-07: Cerrar una incidencia con evidencia (`RF-10`)
+> **Como** técnico,  
+> **quiero** subir la foto del antes y del después al terminar un trabajo,  
+> **para que** quede evidencia y cerrar formalmente el reporte.
+
+**Criterios de aceptación:**
+* No puedo marcar la incidencia como **Solucionado** sin las dos fotos.
+* Puedo registrar un resumen de la reparación.
+* La incidencia queda con fecha de solución.
+
+---
+
+### HU-08: Consultar el historial de reparaciones (`RF-09`)
+> **Como** administrador,  
+> **quiero** consultar qué se dañó, cuándo se arregló, quién lo hizo y cuánto costó,  
+> **para que** tenga un registro histórico de las reparaciones.
+
+**Criterios de aceptación:**
+* Puedo filtrar por fechas, tipo, ubicación y responsable.
+* Cada registro muestra daño, fechas, responsable y costo.
+
+---
+
+## Épica 2: Proveedores y contratistas
+
+### HU-09: Gestionar proveedores (`RF-11`)
+> **Como** administrador,  
+> **quiero** registrar, editar y consultar proveedores y contratistas,  
+> **para que** sus datos estén organizados.
+
+**Criterios de aceptación:**
+* Puedo registrar nombre, especialidad, teléfono y correo.
+* Puedo editar o desactivar un proveedor.
+* Puedo filtrar la lista por especialidad.
+
+---
+
+### HU-10: Cargar documentos de seguridad social (`RF-13`)
+> **Como** administrador,  
+> **quiero** guardar los documentos de ARL y EPS de cada técnico,  
+> **para que** pueda verificar que estén habilitados para ingresar a trabajar.
+
+**Criterios de aceptación:**
+* Puedo cargar el documento con su fecha de vencimiento.
+* El sistema indica si el documento está vigente.
+
+---
+
+### HU-11: Generar órdenes de servicio (`RF-12`, `RF-14`)
+> **Como** administrador,  
+> **quiero** generar una orden de servicio con las tareas que debe realizar el proveedor,  
+> **para que** el trabajo quede claro y documentado.
+
+**Criterios de aceptación:**
+* La orden incluye proveedor, incidencia y lista de tareas.
+* No puedo generar la orden si el proveedor no tiene ARL y EPS vigentes.
+
+---
+
+### HU-12: Calificar a un proveedor (`RF-15`)
+> **Como** administrador,  
+> **quiero** calificar la calidad, el cumplimiento de tiempos y el respeto del presupuesto,  
+> **para que** pueda evaluar a los proveedores con criterios claros.
+
+**Criterios de aceptación:**
+* Puedo calificar los tres criterios.
+* Puedo agregar un comentario.
+* Se actualiza la calificación promedio del proveedor.
+
+---
+
+### HU-13: Consultar el historial de un proveedor (`RF-16`)
+> **Como** administrador,  
+> **quiero** ver las órdenes de servicio y calificaciones de un proveedor,  
+> **para que** decida si lo vuelvo a contratar.
+
+**Criterios de aceptación:**
+* Veo la lista de órdenes con fecha y tareas.
+* Veo todas las calificaciones recibidas.
+
+---
+
+## Épica 3: Comunicación y transparencia
+
+### HU-14: Publicar avisos para la comunidad (`RF-17`, `RF-18`)
+> **Como** administrador,  
+> **quiero** publicar avisos como cortes de agua o mantenimiento de tanques,  
+> **para que** los residentes estén informados oportunamente.
+
+**Criterios de aceptación:**
+* Puedo escribir título, contenido y fecha del aviso.
+* Al publicarlo se envía un correo a todos los residentes.
+
+---
+
+### HU-15: Consultar avisos (`RF-19`)
+> **Como** residente,  
+> **quiero** ver los avisos vigentes y anteriores,  
+> **para que** pueda enterarme de lo que ocurre en la copropiedad.
+
+**Criterios de aceptación:**
+* Veo los avisos ordenados del más reciente al más antiguo.
+* Puedo distinguir los vigentes de los anteriores.
+
+---
+
+### HU-16: Ver la evidencia de mis incidencias cerradas (`RF-20`)
+> **Como** residente,  
+> **quiero** ver las fotos del antes y del después de mi incidencia,  
+> **para que** pueda comprobar que el trabajo se realizó correctamente.
+
+**Criterios de aceptación:**
+* Solo veo la evidencia de las incidencias que yo reporté.
+* El administrador puede ver la evidencia de todas.
+
+---
+
+## Épica 4: Análisis de datos y presupuestos
+
+### HU-17: Registrar gastos de una reparación (`RF-21`)
+> **Como** administrador,  
+> **quiero** registrar el costo de repuestos y mano de obra de cada reparación,  
+> **para que** pueda controlar lo que gasta la copropiedad.
+
+**Criterios de aceptación:**
+* El gasto queda asociado a una incidencia.
+* Puedo separar repuestos y mano de obra.
+* El costo total se calcula automáticamente.
+
+---
+
+### HU-18: Definir el presupuesto anual (`RF-22`)
+> **Como** administrador,  
+> **quiero** definir el presupuesto anual de mantenimiento,  
+> **para que** tenga un límite contra el cual comparar los gastos.
+
+**Criterios de aceptación:**
+* Puedo definir un monto por año.
+* Puedo modificarlo durante el año.
+
+---
+
+### HU-19: Ver estadísticas de incidencias (`RF-23`)
+> **Como** administrador,  
+> **quiero** ver la cantidad de incidencias por tipo, ubicación y estado,  
+> **para que** entienda dónde están los principales problemas.
+
+**Criterios de aceptación:**
+* El dashboard muestra los tres tipos de agrupación.
+* Puedo elegir el rango de fechas.
+
+---
+
+### HU-20: Comparar la frecuencia de daños entre zonas (`RF-24`)
+> **Como** administrador,  
+> **quiero** comparar cuántos daños tiene cada zona (ej. Torre A vs. Torre B),  
+> **para que** decida si conviene reparar o cambiar un equipo.
+
+**Criterios de aceptación:**
+* Puedo comparar dos o más zonas.
+* El resultado se muestra en una tabla o gráfica.
+
+---
+
+### HU-21: Comparar gastos con el presupuesto (`RF-25`)
+> **Como** administrador,  
+> **quiero** ver los gastos acumulados frente al presupuesto anual,  
+> **para que** sepa cuánto presupuesto queda disponible.
+
+**Criterios de aceptación:**
+* Veo el gasto acumulado, el presupuesto y la diferencia.
+* Se muestra el porcentaje del presupuesto utilizado.
+
+---
+
+## Épica 5: Usuarios y acceso
+
+### HU-22: Iniciar y cerrar sesión (`RF-26`)
+> **Como** usuario,  
+> **quiero** iniciar sesión con mi correo y contraseña, y cerrarla cuando termine,  
+> **para que** pueda acceder a mis funciones de forma segura.
+
+**Criterios de aceptación:**
+* Con credenciales válidas entro a la interfaz de mi rol.
+* Con credenciales inválidas veo un mensaje de error.
+* Un usuario inactivo no puede iniciar sesión.
+
+---
+
+### HU-23: Gestionar usuarios y roles (`RF-27`)
+> **Como** administrador,  
+> **quiero** crear, editar y desactivar usuarios y asignarles un rol,  
+> **para que** controle quién usa el sistema.
+
+**Criterios de aceptación:**
+* Puedo asignar el rol Residente, Técnico o Administrador.
+* Al desactivar un usuario no se borra su historial.
+
+---
+
+### HU-24: Restringir funciones según el rol (`RF-28`)
+> **Como** administrador,  
+> **quiero** que cada usuario solo acceda a las funciones de su rol,  
+> **para que** se proteja la información del sistema.
+
+**Criterios de aceptación:**
+* Un residente no puede ver el dashboard.
+* Un técnico solo ve las incidencias asignadas a él.
+* Si el rol no corresponde, el sistema muestra un error de permisos.
