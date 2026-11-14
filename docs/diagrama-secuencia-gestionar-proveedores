@@ -1,0 +1,34 @@
+@startuml
+title DS-06 - Gestionar proveedores
+
+actor Administrador
+boundary "paginas/proveedores.html" as UI
+participant "js/api.js" as APIJS
+control "Express" as Express
+participant "proveedorRutas.js" as Rutas
+participant "roles.js" as Roles
+participant "proveedorControlador.js" as Controlador
+database "Proveedor.js / MongoDB" as BD
+
+Administrador -> UI : Crear, editar o consultar proveedor
+UI -> APIJS : Enviar operacion y datos
+APIJS -> Express : Solicitud de proveedores
+Express -> Rutas : Enrutar solicitud
+Rutas -> Roles : Validar rol administrador
+Roles --> Rutas : Permiso validado
+Rutas -> Controlador : Ejecutar operacion
+
+alt Crear proveedor
+    Controlador -> BD : Insertar proveedor
+else Editar proveedor
+    Controlador -> BD : Actualizar proveedor
+else Consultar proveedores
+    Controlador -> BD : Buscar proveedores
+end
+
+BD --> Controlador : Resultado de operacion
+Controlador --> APIJS : Datos o confirmacion
+APIJS --> UI : Mostrar resultado
+UI --> Administrador : Actualizar interfaz
+
+@enduml
