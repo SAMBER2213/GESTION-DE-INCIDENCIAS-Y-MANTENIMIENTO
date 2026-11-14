@@ -1,0 +1,32 @@
+@startuml
+title DS-04 - Consultar y filtrar incidencias
+
+actor Usuario
+boundary "paginas/incidencias.html" as UI
+participant "js/api.js" as APIJS
+control "Express" as Express
+participant "incidenciaRutas.js" as Rutas
+participant "roles.js" as Roles
+participant "incidenciaControlador.js" as Controlador
+database "Incidencia.js / MongoDB" as BD
+
+Usuario -> UI : Abrir listado y aplicar filtros
+UI -> APIJS : Solicitar incidencias
+APIJS -> Express : GET /api/incidencias
+Express -> Rutas : Enrutar solicitud
+Rutas -> Roles : Validar acceso
+Roles --> Rutas : Permiso validado
+Rutas -> Controlador : Consultar incidencias
+
+alt Usuario residente
+    Controlador -> BD : Buscar incidencias del residente
+else Usuario administrador
+    Controlador -> BD : Buscar incidencias con filtros
+end
+
+BD --> Controlador : Lista de incidencias
+Controlador --> APIJS : Resultados autorizados
+APIJS --> UI : Entregar listado
+UI --> Usuario : Mostrar incidencias y estados
+
+@enduml
