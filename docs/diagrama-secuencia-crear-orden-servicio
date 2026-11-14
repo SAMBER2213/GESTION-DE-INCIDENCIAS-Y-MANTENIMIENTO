@@ -1,0 +1,38 @@
+@startuml
+title DS-07 - Crear orden de servicio
+
+actor Administrador
+boundary "Interfaz web" as UI
+participant "js/api.js" as APIJS
+control "Express" as Express
+participant "ordenServicioRutas.js" as Rutas
+participant "roles.js" as Roles
+participant "ordenServicioControlador.js" as Controlador
+database "Usuario.js / MongoDB" as Usuarios
+database "Proveedor.js / MongoDB" as Proveedores
+database "OrdenServicio.js / MongoDB" as Ordenes
+
+Administrador -> UI : Registrar orden y responsable
+UI -> APIJS : Enviar datos de la orden
+APIJS -> Express : POST /api/ordenes-servicio
+Express -> Rutas : Enrutar solicitud
+Rutas -> Roles : Validar rol administrador
+Roles --> Rutas : Permiso validado
+Rutas -> Controlador : Crear orden
+Controlador -> Proveedores : Verificar proveedor
+Proveedores --> Controlador : Resultado de consulta
+Controlador -> Usuarios : Consultar documentos ARL/EPS
+Usuarios --> Controlador : Estado de documentos
+
+alt Documentos vigentes y proveedor valido
+    Controlador -> Ordenes : Guardar orden de servicio
+    Ordenes --> Controlador : Orden creada
+    Controlador --> APIJS : Confirmacion
+else Documentos faltantes o vencidos
+    Controlador --> APIJS : Rechazar creacion
+end
+
+APIJS --> UI : Mostrar resultado
+UI --> Administrador : Confirmar o corregir datos
+
+@enduml
