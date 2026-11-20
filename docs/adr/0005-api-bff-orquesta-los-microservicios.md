@@ -4,7 +4,7 @@
 - **Fecha:** 2026-11-14
 
 ## Contexto
-Varios casos de uso cruzan contextos: asignar una incidencia exige validar al técnico (Identidad) y notificarlo (Comunicación); registrar un gasto exige confirmar que la incidencia existe; el dashboard combina Incidencias y Finanzas. Hay que decidir dónde vive esa coordinación. La Clase 3 establece que las APIs orquestan y los microservicios implementan, y que los microservicios no deben conocerse entre sí mediante llamadas síncronas.
+Varios casos de uso cruzan contextos: asignar una incidencia exige validar al técnico (Identidad) y notificarlo (Comunicación); registrar un gasto exige confirmar que la incidencia existe; el dashboard combina Incidencias y Finanzas. Hay que decidir dónde vive esa coordinación. Como criterio de diseño, las APIs orquestan y los microservicios implementan, y los microservicios no deben conocerse entre sí mediante llamadas síncronas.
 
 ## Decisión
 Crear `api-bff`, una capa API que:
@@ -28,4 +28,3 @@ Crear `api-bff`, una capa API que:
 - (-) `api-bff` puede convertirse en un cuello de botella o en un «servicio dios». Mitigación: un orquestador por caso de uso, sin reglas de negocio, y revisar este ADR si crece.
 - (-) `api-bff` es un punto único de fallo.
 - (-) Los servicios internos dependen de que solo `api-bff` los llame. Si el plan gratuito de Render no ofrece servicios privados (verificar), habrá que proteger los endpoints internos con una clave compartida entre `api-bff` y los servicios.
-
