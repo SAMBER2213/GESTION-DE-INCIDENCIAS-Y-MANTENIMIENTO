@@ -62,13 +62,28 @@ Desarrollar una aplicación web que permita reportar, atender, hacer seguimiento
 6. Se registran el costo y los datos de la reparación en el historial.
 7. El residente consulta el resultado desde la plataforma.
 
+## Arquitectura del sistema
+
+El sistema se compone de cinco microservicios, uno por contexto de negocio, y una capa API que los orquesta:
+
+| Servicio | Responsabilidad |
+|----------|-----------------|
+| `api-bff` | Entrada única del frontend: verifica identidad y rol, orquesta los casos de uso y compone las lecturas |
+| `ms-usuarios` | Cuentas, roles y sesiones |
+| `ms-incidencias` | Reportes, estados, evidencia, historial y estadísticas |
+| `ms-proveedores` | Proveedores, documentos de seguridad social, órdenes de servicio y calificaciones |
+| `ms-finanzas` | Gastos y presupuesto anual |
+| `ms-comunicaciones` | Avisos y notificaciones por correo |
+
+Cada microservicio tiene su propia base de datos lógica y los microservicios no se llaman entre sí. Más detalle en [Event Storming](EventStorming/event-storming-completo.md) y en los [ADR](adr/).
+
 ## Tecnologías
 
 | Parte | Tecnología |
 |-------|------------|
 | Frontend | HTML, CSS y JavaScript |
-| Backend | Node.js y Express |
-| Base de datos | MongoDB (MongoDB Atlas) con Mongoose |
+| Microservicios y capa API | Node.js y Express |
+| Base de datos | MongoDB (MongoDB Atlas) con Mongoose, una base de datos lógica por microservicio |
 | Despliegue | Render |
 | Control de versiones | Git y GitHub |
 | Documentación | Markdown y PlantUML |
@@ -84,7 +99,7 @@ Desarrollar una aplicación web que permita reportar, atender, hacer seguimiento
 ```
 ├── README.md
 ├── docs/        Documentación: descripción, requerimientos, ADRs, diagramas, queries y actions
-├── backend/     Servidor y API en Node.js
+├── services/    Capa API y microservicios en Node.js (una carpeta por servicio)
 └── frontend/    Páginas, estilos y scripts del cliente
 ```
 

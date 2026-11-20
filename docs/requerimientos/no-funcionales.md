@@ -17,7 +17,7 @@ Describen **cómo** debe comportarse el sistema, no qué funciones ofrece.
 | RNF-11 | Usabilidad | Reportar una incidencia no debe tomar más de 5 pasos. |
 | RNF-12 | Disponibilidad | El sistema estará desplegado en Render y accesible desde internet. |
 | RNF-13 | Disponibilidad | Se tolera el tiempo de arranque del plan gratuito de Render tras un periodo de inactividad. |
-| RNF-14 | Mantenibilidad | El código se organiza por capas (modelos, controladores, rutas) y con nombres en español. |
+| RNF-14 | Mantenibilidad | El código de cada servicio se organiza por capas (modelos, controladores, rutas) y con nombres en español. |
 | RNF-15 | Mantenibilidad | La documentación (requerimientos, ADRs, diagramas) se mantiene actualizada en la carpeta `docs/` del repositorio. |
 | RNF-16 | Portabilidad | El sistema debe funcionar en los navegadores actuales (Chrome, Edge, Firefox). |
 | RNF-17 | Integridad | Los registros históricos (incidencias cerradas, gastos, calificaciones) no se eliminan, solo se archivan o desactivan. |

@@ -22,5 +22,4 @@ Entre servicios no hay consultas cruzadas ni `populate`: las referencias son ide
 - (-) Todos los servicios comparten los límites de almacenamiento y de conexiones del plan gratuito del clúster.
 - (-) No hay *joins*: las lecturas que combinan datos (por ejemplo, el costo total de una incidencia) se componen en `api-bff`.
 - (-) Los datos copiados (nombres) pueden quedar desactualizados; para un registro histórico eso es aceptable.
-- (-) Cambia RT-04: aparecen dos modelos nuevos (`Presupuesto` y `Notificacion`) y `RT-19` debe listar una `MONGODB_URI` por servicio.
-
+- (-) RT-04 debe listar los modelos de cada servicio (incluidos `Presupuesto` y `Notificacion`) y RT-19 una `MONGODB_URI` por servicio.

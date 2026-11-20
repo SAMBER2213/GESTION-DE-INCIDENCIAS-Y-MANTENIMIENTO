@@ -1,6 +1,6 @@
 # Queries y Actions
 
-Contratos de las operaciones del sistema, derivados de los requerimientos funcionales (`docs/requerimientos/funcionales.md`). Siguen el principio **CQS (Command Query Separation)** y el formato estándar del proceso SEED(S): las lecturas se documentan como **Queries** y las operaciones que modifican el estado como **Actions**.
+Contratos de las operaciones del sistema, derivados de los requerimientos funcionales (`docs/requerimientos/funcionales.md`). Siguen el principio **CQS (Command Query Separation)** y el formato estándar de queries y actions: las lecturas se documentan como **Queries** y las operaciones que modifican el estado como **Actions**.
 
 ## 1. Formato estándar
 
@@ -33,7 +33,7 @@ Response (opcional): lista de elementos de datos en la respuesta
 - Los listados aceptan `pagina` y `limite` como inputs opcionales.
 - Los datos recibidos se validan en el servidor (RNF-08). Cuando una Action falla, su respuesta es un error detallado y no se produce ningún cambio de estado.
 - Los registros históricos no se eliminan, solo se desactivan o archivan (RNF-17).
-- Las Actions que notifican (RF-03, RF-05, RF-18) lo hacen por correo con `nodemailer` (RT-16).
+- Las Actions que notifican (RF-03, RF-05, RF-18) lo hacen por correo con `nodemailer` (RT-16). La notificación se solicita después de confirmar la acción y no bloquea su respuesta; si el envío falla, se registra el error y la acción no se revierte.
 
 ---
 
@@ -148,8 +148,8 @@ Lista los gastos registrados de las reparaciones, con su concepto y valor.
 
 **Rol:** Administrador · **Ref.:** RF-21
 
-- **Input**: incidencia_id (opcional), proveedor_id (opcional), concepto (opcional), fecha_desde (opcional), fecha_hasta (opcional), pagina (opcional), limite (opcional)
-- **Response**: lista de gastos con gasto_id, incidencia_id, concepto, descripcion, monto, fecha, proveedor, registrado_por; total_monto
+- **Input**: incidencia_id o incidencia_ids (opcionales; la lista permite consultar varias incidencias en una sola llamada), proveedor_id (opcional), concepto (opcional), fecha_desde (opcional), fecha_hasta (opcional), pagina (opcional), limite (opcional)
+- **Response**: lista de gastos con gasto_id, incidencia_id, concepto, descripcion, monto, fecha, proveedor, registrado_por; total_monto; total_por_incidencia (cuando se envía incidencia_ids)
 
 ### Q-15 · Listar usuarios
 Lista los usuarios del sistema con su rol y su estado.
@@ -198,7 +198,7 @@ Termina la sesión del usuario autenticado.
 **Rol:** Todos · **Ref.:** RF-26
 
 - **Input**: ninguno (el usuario se identifica con el token)
-- **Expected outcome**: la sesión queda cerrada y el token deja de usarse.
+- **Expected outcome**: el cliente descarta el token; este no tiene estado en el servidor y expira en poco tiempo.
 - **Response**: código de éxito
 
 ### A-03 · Crear usuario
@@ -392,3 +392,19 @@ Establece el presupuesto de mantenimiento de un año.
 | RF-26 | A-01, A-02 |
 | RF-27 | Q-15, A-03, A-04, A-05 |
 | RF-28 | Transversal: cada operación valida el rol autorizado |
+
+---
+
+## 6. Servicio responsable de cada operación
+
+Cada operación pertenece a un único microservicio. Las lecturas que combinan datos de dos servicios (Q-02, Q-05 y el dashboard) las compone `api-bff`. El detalle de endpoints internos está en el `README.md` de cada carpeta de `services/`.
+
+| Servicio | Actions | Queries |
+|----------|---------|---------|
+| `ms-usuarios` | A-01, A-03, A-04, A-05 (A-02 no requiere endpoint) | Q-15 |
+| `ms-incidencias` | A-06, A-07, A-08, A-09 | Q-01, Q-02, Q-03, Q-04, Q-05, Q-11, Q-12 |
+| `ms-proveedores` | A-10, A-11, A-12, A-13, A-14 | Q-06, Q-07, Q-08, Q-09 |
+| `ms-finanzas` | A-16, A-17 | Q-13, Q-14 |
+| `ms-comunicaciones` | A-15 | Q-10 |
+
+Q-02 y Q-05 incluyen el costo de la reparación, que `api-bff` obtiene de `ms-finanzas` (Q-14 con `incidencia_ids`) y suma a la respuesta de `ms-incidencias`. Q-13 y las estadísticas Q-11 y Q-12 las compone `api-bff` en el dashboard.
