@@ -423,7 +423,7 @@ En este proyecto «ventaja competitiva» se interpreta como **valor para el obje
 | Gestión de Incidencias | **L** | M | Es el núcleo: el problema que describe el proyecto. Incluye fotos, estados, permisos por rol e historial. | Diseñar e implementar *in-house* |
 | Proveedores y Contratistas | M | M | Diferencia al sistema de un simple registro de reportes (órdenes, ARL y EPS, calificaciones), con reglas propias (RF-14). | *In-house* |
 | Finanzas y Presupuesto | M | S | Habilita las decisiones del administrador (RF-21 a RF-25) con un modelo sencillo. | *In-house* |
-| Comunicación y Avisos | S | S | El envío de correos se resuelve con `nodemailer` (RT-16). | Asignar a *trainees*: es el servicio ideal para que un integrante nuevo pruebe la plantilla de microservicio |
+| Comunicación y Avisos | S | S | El envío de correos se realiza desde Python con `smtplib` o `aiosmtplib` (RT-16). | Asignar a *trainees*: es el servicio ideal para que un integrante nuevo pruebe la plantilla de microservicio |
 | Identidad y Acceso | S | M | Es necesario pero no diferencia al sistema; la seguridad exige cuidado. | Juicio: construir una versión mínima con `bcrypt` y `jsonwebtoken` (RT-12). Reevaluar *comprar* (un servicio de identidad gestionado) si crece la complejidad |
 
 Esta matriz es una propuesta; el equipo debe ajustarla según su experiencia y el tiempo disponible.

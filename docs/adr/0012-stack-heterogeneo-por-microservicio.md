@@ -1,33 +1,33 @@
-# ADR-0012: Elegir la tecnología de cada microservicio según su necesidad
+# ADR-0012: Adoptar una arquitectura políglota con Node.js y Python
 
 - **Estado:** Aceptado
 - **Fecha:** 2026-11-26
 
 ## Contexto
-Cada microservicio es autónomo y es dueño de sus datos (ADR-0006), por lo que puede usar la tecnología que mejor se ajuste a su contexto. Si todos los servicios usan exactamente el mismo lenguaje y el mismo motor de datos, el sistema queda atado a una sola tecnología y no se aprovecha esa autonomía. Tener demasiadas tecnologías, en cambio, complica el mantenimiento de un equipo pequeño.
+El profesor exige una arquitectura de microservicios con más de un lenguaje. El equipo decidió usar exactamente Node.js y Python. La distribución debe responder a las responsabilidades de cada servicio y mantener simples los contratos HTTP/JSON.
 
 ## Decisión
-Aplicar la **regla de los dos**: usar al menos dos lenguajes y dos motores de datos, sin pasar de tres de cada uno.
+Usar exactamente dos lenguajes, según el requisito académico. MongoDB es el motor de datos para los cinco microservicios, con una base lógica por servicio (ADR-0006).
 
-| Servicio | Lenguaje y framework | Datos | Razón |
-|----------|---------------------|-------|-------|
-| `api-bff` | Node.js y Express | Sin base de datos | Comparte lenguaje con el frontend y solo reenvía y compone peticiones |
-| `ms-usuarios` | Node.js y Express | MongoDB | Documentos de usuario con rol; `bcrypt` y `jsonwebtoken` (RT-12) |
-| `ms-incidencias` | Node.js y Express | MongoDB | Documentos con historial de estados y fotos embebidos (ADR-0007 y ADR-0008) |
-| `ms-proveedores` | Node.js y Express | MongoDB | Documentos con calificaciones y documentos de seguridad social embebidos |
-| `ms-finanzas` | Node.js y Express | MongoDB | Gastos y presupuesto con soportes embebidos (ADR-0007) |
-| `ms-comunicaciones` | Python y Flask | Redis | Avisos y registros de envío son datos simples, sin relaciones, que se consultan por clave o en orden cronológico; el envío de correo se resuelve con la biblioteca estándar de Python |
+| Servicio | Lenguaje y framework | Acceso a datos y responsabilidad |
+|----------|----------------------|-------------------------------|
+| `api-bff` | Node.js + Express | Sin base de datos; JWT/roles, orquestación y composición con `Promise.all` |
+| `ms-usuarios` | Node.js + Express | Mongoose; cuentas, roles, `bcrypt` y `jsonwebtoken` |
+| `ms-incidencias` | Node.js + Express | Mongoose; incidencias, historial y fotos con `multer`/Cloudinary |
+| `ms-proveedores` | Python 3.12 + FastAPI | Motor/Pydantic; proveedores, documentos vigentes y órdenes |
+| `ms-finanzas` | Python 3.12 + FastAPI | Motor/Pydantic; gastos, presupuesto y cálculos |
+| `ms-comunicaciones` | Python 3.12 + FastAPI | Motor/Pydantic; avisos y correos con `smtplib`/`aiosmtplib` |
 
-Resultado: dos lenguajes (JavaScript y Python) y dos motores de datos (MongoDB y Redis). Redis guarda sus datos en disco (modo AOF) para que no se pierdan al reiniciar.
+Los servicios se comunican por REST/JSON solo a través de `api-bff`; los microservicios no se llaman entre sí. MongoDB se mantiene como motor común con bases lógicas separadas.
 
 ## Alternativas consideradas
-- **Todos los servicios en Node.js y MongoDB:** es lo más simple, pero no hay diversidad y el equipo queda atado a una sola tecnología.
-- **PostgreSQL para `ms-finanzas`:** el modelo relacional ofrece mejor integridad para datos de dinero, pero agrega un tercer motor y otro servicio gratuito que verificar (RT-23).
+- **Un solo lenguaje para todos los servicios:** simplifica el mantenimiento, pero incumple el requisito académico de arquitectura políglota.
+- **Tres o más lenguajes:** agregan ecosistemas y complejidad sin aportar al alcance del proyecto.
 - **Go para algún servicio:** buen rendimiento, pero el equipo no tiene experiencia con él.
 
 ## Consecuencias
 - (+) Cada servicio usa una herramienta justificada y el sistema no depende de una sola tecnología.
 - (+) Docker oculta las diferencias de instalación (ADR-0011).
 - (-) Hay dos conjuntos de dependencias y dos formas de construir y probar los servicios.
-- (-) Hace falta un Redis gestionado con plan gratuito para el despliegue (RT-23), que debe verificarse.
-- (-) Este ADR ajusta parcialmente el ADR-0001 (`ms-comunicaciones` usa Python) y el ADR-0002 (`ms-comunicaciones` usa Redis).
+- (-) El equipo mantiene dos ecosistemas y debe conocer Node.js y Python.
+- (-) Cada runtime requiere su configuración propia de dependencias y despliegue (ADR-0011).

@@ -33,7 +33,7 @@ Response (opcional): lista de elementos de datos en la respuesta
 - Los listados aceptan `pagina` y `limite` como inputs opcionales.
 - Los datos recibidos se validan en el servidor (RNF-08). Cuando una Action falla, su respuesta es un error detallado y no se produce ningún cambio de estado.
 - Los registros históricos no se eliminan, solo se desactivan o archivan (RNF-17).
-- Las Actions que notifican (RF-03, RF-05, RF-18) lo hacen por correo con `nodemailer` (RT-16). La notificación se solicita después de confirmar la acción y no bloquea su respuesta; si el envío falla, se registra el error y la acción no se revierte.
+- Las Actions que notifican (RF-03, RF-05, RF-18) lo hacen por correo con `smtplib` o `aiosmtplib` desde `ms-comunicaciones` (RT-16). La notificación se solicita después de confirmar la acción y no bloquea su respuesta; si el envío falla, se registra el error y la acción no se revierte.
 
 ---
 

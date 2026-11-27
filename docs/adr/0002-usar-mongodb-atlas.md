@@ -1,4 +1,4 @@
-# ADR-0002: Usar MongoDB Atlas con Mongoose como base de datos
+# ADR-0002: Usar MongoDB Atlas como base de datos
 
 - **Estado:** Aceptado
 - **Fecha:** 2026-10-30
@@ -7,7 +7,7 @@
 El sistema guarda incidencias con descripción, estado, fotos y historial de cambios, además de proveedores, órdenes de servicio y avisos. Los datos tienen estructuras variadas y pueden evolucionar durante el desarrollo. El equipo necesita una base de datos accesible desde la nube, sin instalar ni administrar un servidor.
 
 ## Decisión
-Usar MongoDB como base de datos, alojada en MongoDB Atlas, y Mongoose como ODM desde Node.js.
+Usar MongoDB como base de datos, alojada en MongoDB Atlas, con Mongoose para los servicios Node.js y Motor (junto con Pydantic para validación) en los servicios Python. Cada servicio usa su propia base lógica.
 
 ## Alternativas consideradas
 - **PostgreSQL:** relacional y muy sólida, pero exige diseñar el esquema completo desde el inicio y los cambios son más costosos.

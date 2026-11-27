@@ -28,3 +28,11 @@ Llama a los cinco microservicios. Ningún microservicio llama a otro.
 - `CLAVE_INTERNA` (si los servicios no se aíslan en una red privada)
 
 Cada servicio publica un `.env.example` y los archivos `.env` se excluyen con `.gitignore` (RNF-06).
+
+## Tecnología definida (ADR-0012)
+
+- **Lenguaje y framework:** Node.js + Express.
+- **Responsabilidad que justifica el stack:** JWT y roles, orquestación y composición de lecturas.
+- **Librerías:** express, jsonwebtoken, dotenv.
+- **Base lógica:** No tiene base de datos propia.
+- **Arranque en Docker/Render:** `node server.js`.

@@ -4,7 +4,7 @@ Este documento explica cómo levantar todo el sistema en un computador con un so
 
 ## Requisitos
 
-Solo se necesita **Docker** con **Docker Compose** y **Git**. No hay que instalar Node.js, Python, MongoDB ni Redis: todo corre dentro de contenedores.
+Solo se necesita **Docker** con **Docker Compose** y **Git**. No hay que instalar Node.js, Python, MongoDB: todo corre dentro de contenedores.
 
 ```bash
 docker --version
@@ -36,9 +36,11 @@ Deben aparecer nueve contenedores: `traefik`, `mongo`, `redis`, `api-bff` y los 
 | `api-bff` | Node.js y Express | Sin base de datos | 3000 | `http://localhost:9080/api/...` y el frontend en `/` |
 | `ms-usuarios` | Node.js y Express | MongoDB (`usuarios_db`) | 3001 | `http://localhost:9080/ms-usuarios/...` |
 | `ms-incidencias` | Node.js y Express | MongoDB (`incidencias_db`) | 3002 | `http://localhost:9080/ms-incidencias/...` |
-| `ms-proveedores` | Node.js y Express | MongoDB (`proveedores_db`) | 3003 | `http://localhost:9080/ms-proveedores/...` |
-| `ms-finanzas` | Node.js y Express | MongoDB (`finanzas_db`) | 3004 | `http://localhost:9080/ms-finanzas/...` |
-| `ms-comunicaciones` | Python y Flask | Redis | 3005 | `http://localhost:9080/ms-comunicaciones/...` |
+| `ms-proveedores` | Python 3.12 y FastAPI | MongoDB (`proveedores_db`) | 3003 | `http://localhost:9080/ms-proveedores/...` |
+| `ms-finanzas` | Python 3.12 y FastAPI | MongoDB (`finanzas_db`) | 3004 | `http://localhost:9080/ms-finanzas/...` |
+| `ms-comunicaciones` | Python 3.12 y FastAPI | MongoDB (`comunicaciones_db`) | 3005 | `http://localhost:9080/ms-comunicaciones/...` |
+
+> **Estado de la rama:** esta tabla refleja el stack acordado en ADR-0012. El código y el Compose actuales aún usan Node.js en `ms-proveedores` y `ms-finanzas`, y Flask/Redis en `ms-comunicaciones`; esos servicios deben migrarse antes de que la ejecución Docker coincida con esta documentación.
 
 Panel de Traefik (rutas y servicios activos): `http://localhost:8081`.
 
@@ -71,8 +73,7 @@ Consultar las bases de datos (solo lectura, para verificar):
 
 ```bash
 docker compose exec mongo mongosh incidencias_db --quiet --eval "db.incidencias.find().toArray()"
-docker compose exec redis redis-cli lrange avisos:ids 0 -1
-docker compose exec redis redis-cli hgetall aviso:1
+docker compose exec mongo mongosh comunicaciones_db --quiet --eval "db.avisos.find().toArray()"
 ```
 
 ## Trabajar en un solo servicio
@@ -157,6 +158,6 @@ Capturas del entorno funcionando, en [`docs/evidencias/`](evidencias/):
 | `06-api-health.png` | La salud de todos los microservicios en `api-bff` |
 | `07-api-resumen.png` | La lectura compuesta de tres microservicios |
 | `08-mongo-datos.png` | Los datos de ejemplo dentro de MongoDB |
-| `09-redis-datos.png` | Los datos de ejemplo dentro de Redis |
+| `09-mongo-comunicaciones.png` | Los datos de ejemplo de Comunicaciones en MongoDB |
 | `10-servicio-aislado.png` | Un microservicio levantado por separado |
 | `11-github-actions.png` | La verificación automática en verde |

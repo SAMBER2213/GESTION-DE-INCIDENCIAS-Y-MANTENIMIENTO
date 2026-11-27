@@ -1,13 +1,13 @@
 # ADR-0001: Usar Node.js y Express para los microservicios y la capa API
 
-- **Estado:** Aceptado
+- **Estado:** Reemplazado por ADR-0012
 - **Fecha:** 2026-10-30
 
 ## Contexto
 El sistema necesita servicios que gestionen incidencias, proveedores, avisos y gastos, con autenticación por roles y subida de fotos. El equipo es pequeño, el proyecto es académico y el frontend ya usa JavaScript.
 
 ## Decisión
-Usar Node.js con el framework Express para construir cada microservicio y la capa API (`api-bff`).
+La decisión inicial de usar Node.js y Express en todos los servicios queda reemplazada por la distribución de lenguajes del ADR-0012. Se conserva este ADR como historial.
 
 ## Alternativas consideradas
 - **Django (Python):** completo, pero implica un segundo lenguaje para el equipo.

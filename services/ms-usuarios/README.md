@@ -15,7 +15,7 @@ Base de datos lógica: `usuarios_db` (MongoDB Atlas, ADR-0006). Colecciones:
 
 - `usuarios`: nombre, correo (único), contrasena_hash, rol, activo
 
-El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming-completo.md).
+El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming.md).
 
 ## Operaciones
 
@@ -42,3 +42,11 @@ No llama a ningún otro servicio.
 - `JWT_SECRET`
 
 Cada servicio publica un `.env.example` y los archivos `.env` se excluyen con `.gitignore` (RNF-06).
+
+## Tecnología definida (ADR-0012)
+
+- **Lenguaje y framework:** Node.js + Express.
+- **Responsabilidad que justifica el stack:** Cuentas, roles y autenticación.
+- **Librerías:** express, mongoose, bcrypt, jsonwebtoken, dotenv.
+- **Base lógica:** MongoDB, base lógica propia del servicio; Mongoose para Node.js o Motor/Pydantic para Python.
+- **Arranque en Docker/Render:** `node server.js`.

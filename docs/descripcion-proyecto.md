@@ -66,25 +66,27 @@ Desarrollar una aplicación web que permita reportar, atender, hacer seguimiento
 
 El sistema se compone de cinco microservicios, uno por contexto de negocio, y una capa API que los orquesta:
 
-| Servicio | Responsabilidad |
-|----------|-----------------|
-| `api-bff` | Entrada única del frontend: verifica identidad y rol, orquesta los casos de uso y compone las lecturas |
-| `ms-usuarios` | Cuentas, roles y sesiones |
-| `ms-incidencias` | Reportes, estados, evidencia, historial y estadísticas |
-| `ms-proveedores` | Proveedores, documentos de seguridad social, órdenes de servicio y calificaciones |
-| `ms-finanzas` | Gastos y presupuesto anual |
-| `ms-comunicaciones` | Avisos y notificaciones por correo |
+| Servicio | Responsabilidad | Lenguaje |
+|----------|-----------------|-----------|
+| `api-bff` | Entrada única del frontend: verifica identidad y rol, orquesta los casos de uso y compone las lecturas | Node.js + Express |
+| `ms-usuarios` | Cuentas, roles y sesiones | Node.js + Express |
+| `ms-incidencias` | Reportes, estados, evidencia, historial y estadísticas | Node.js + Express |
+| `ms-proveedores` | Proveedores, documentos de seguridad social, órdenes de servicio y calificaciones | Python + FastAPI |
+| `ms-finanzas` | Gastos y presupuesto anual | Python + FastAPI |
+| `ms-comunicaciones` | Avisos y notificaciones por correo | Python + FastAPI |
 
-Cada microservicio tiene su propia base de datos lógica y los microservicios no se llaman entre sí. Más detalle en [Event Storming](EventStorming/event-storming-completo.md) y en los [ADR](adr/).
+Cada microservicio tiene una base lógica propia en MongoDB. Los servicios se comunican por REST/JSON únicamente a través de `api-bff`; no se llaman entre sí. Más detalle en [Event Storming](EventStorming/event-storming.md) y en los [ADR](adr/).
 
 ## Tecnologías
 
 | Parte | Tecnología |
 |-------|------------|
 | Frontend | HTML, CSS y JavaScript |
-| Microservicios y capa API | Node.js y Express |
-| Base de datos | MongoDB (MongoDB Atlas) con Mongoose, una base de datos lógica por microservicio |
-| Despliegue | Render |
+| Servicios Node.js | Node.js 20 + Express para `api-bff`, `ms-usuarios` y `ms-incidencias`; Mongoose, bcrypt/jsonwebtoken y multer según el servicio |
+| Servicios Python | Python 3.12 + FastAPI para `ms-proveedores`, `ms-finanzas` y `ms-comunicaciones`; Motor, Pydantic y smtplib/aiosmtplib |
+| Base de datos | MongoDB; una base lógica por microservicio, con Mongoose en Node y Motor en Python |
+| Contenedores | Dockerfile por servicio y Docker Compose para desarrollo local |
+| Despliegue | Render, con comando de inicio según el runtime |
 | Control de versiones | Git y GitHub |
 | Documentación | Markdown y PlantUML |
 
@@ -98,13 +100,14 @@ Cada microservicio tiene su propia base de datos lógica y los microservicios no
 
 ```
 ├── README.md
+├── docker-compose.yml
 ├── docs/        Documentación: descripción, requerimientos, ADRs, diagramas, queries y actions
-├── services/    Capa API y microservicios en Node.js (una carpeta por servicio)
+├── services/    API y microservicios Node.js/Python (una carpeta por servicio)
 └── frontend/    Páginas, estilos y scripts del cliente
 ```
 
 ## Equipo
-_(Nombres de los integrantes del grupo)_
+_(Pendiente: nombres de los integrantes del grupo)_
 
 ## Contexto académico
-Proyecto universitario desarrollado como parte de la asignatura _(nombre de la materia)_, bajo la guía del profesor _(nombre del docente)_.
+Proyecto universitario desarrollado como parte de la asignatura _(Pendiente: nombre de la materia)_, bajo la guía del profesor _(Pendiente: nombre del docente)_.
