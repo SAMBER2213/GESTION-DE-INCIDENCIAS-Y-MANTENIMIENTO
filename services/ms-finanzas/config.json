@@ -1,0 +1,11 @@
+{
+  "nombre": "ms-finanzas",
+  "puerto": 3004,
+  "recurso": "gastos",
+  "baseDeDatos": "finanzas_db",
+  "camposRequeridos": [
+    "incidencia_id",
+    "concepto",
+    "monto"
+  ]
+}

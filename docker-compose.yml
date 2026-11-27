@@ -1,0 +1,200 @@
+# Entorno completo: proxy Traefik + api-bff + 5 microservicios + bases de datos.
+# Uso: docker compose up -d --build   (o: make start)
+name: gestion-incidencias
+
+services:
+  # Proxy inverso: unico punto de entrada. Descubre los servicios por sus etiquetas (labels).
+  traefik:
+    image: traefik:v3.6
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "9080:80"   # entrada de todas las peticiones
+      - "8081:8080" # panel de Traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
+  # Bases de datos (una instancia local con una base logica por servicio, ADR-0006)
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  # Capa API: recibe todo lo que no es de un microservicio y orquesta los casos de uso
+  api-bff:
+    build: ./services/api-bff
+    environment:
+      PORT: "3000"
+      CLAVE_INTERNA: ${CLAVE_INTERNA:-}
+    volumes:
+      - ./frontend:/app/public:ro
+    depends_on:
+      ms-usuarios:
+        condition: service_healthy
+      ms-incidencias:
+        condition: service_healthy
+      ms-proveedores:
+        condition: service_healthy
+      ms-finanzas:
+        condition: service_healthy
+      ms-comunicaciones:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bff.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.bff.priority=1"
+      - "traefik.http.routers.bff.entrypoints=web"
+      - "traefik.http.services.bff.loadbalancer.server.port=3000"
+
+  ms-usuarios:
+    build: ./services/ms-usuarios
+    environment:
+      PORT: "3001"
+      MONGODB_URI: mongodb://mongo:27017/usuarios_db
+      CLAVE_INTERNA: ${CLAVE_INTERNA:-}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3001/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.usuarios.rule=PathPrefix(`/ms-usuarios`)"
+      - "traefik.http.routers.usuarios.entrypoints=web"
+      - "traefik.http.routers.usuarios.middlewares=quitar-usuarios"
+      - "traefik.http.middlewares.quitar-usuarios.stripprefix.prefixes=/ms-usuarios"
+      - "traefik.http.services.usuarios.loadbalancer.server.port=3001"
+
+  ms-incidencias:
+    build: ./services/ms-incidencias
+    environment:
+      PORT: "3002"
+      MONGODB_URI: mongodb://mongo:27017/incidencias_db
+      CLAVE_INTERNA: ${CLAVE_INTERNA:-}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3002/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.incidencias.rule=PathPrefix(`/ms-incidencias`)"
+      - "traefik.http.routers.incidencias.entrypoints=web"
+      - "traefik.http.routers.incidencias.middlewares=quitar-incidencias"
+      - "traefik.http.middlewares.quitar-incidencias.stripprefix.prefixes=/ms-incidencias"
+      - "traefik.http.services.incidencias.loadbalancer.server.port=3002"
+
+  ms-proveedores:
+    build: ./services/ms-proveedores
+    environment:
+      PORT: "3003"
+      MONGODB_URI: mongodb://mongo:27017/proveedores_db
+      CLAVE_INTERNA: ${CLAVE_INTERNA:-}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3003/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proveedores.rule=PathPrefix(`/ms-proveedores`)"
+      - "traefik.http.routers.proveedores.entrypoints=web"
+      - "traefik.http.routers.proveedores.middlewares=quitar-proveedores"
+      - "traefik.http.middlewares.quitar-proveedores.stripprefix.prefixes=/ms-proveedores"
+      - "traefik.http.services.proveedores.loadbalancer.server.port=3003"
+
+  ms-finanzas:
+    build: ./services/ms-finanzas
+    environment:
+      PORT: "3004"
+      MONGODB_URI: mongodb://mongo:27017/finanzas_db
+      CLAVE_INTERNA: ${CLAVE_INTERNA:-}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3004/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.finanzas.rule=PathPrefix(`/ms-finanzas`)"
+      - "traefik.http.routers.finanzas.entrypoints=web"
+      - "traefik.http.routers.finanzas.middlewares=quitar-finanzas"
+      - "traefik.http.middlewares.quitar-finanzas.stripprefix.prefixes=/ms-finanzas"
+      - "traefik.http.services.finanzas.loadbalancer.server.port=3004"
+
+  ms-comunicaciones:
+    build: ./services/ms-comunicaciones
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CLAVE_INTERNA: ${CLAVE_INTERNA:-}
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3005/ping')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.comunicaciones.rule=PathPrefix(`/ms-comunicaciones`)"
+      - "traefik.http.routers.comunicaciones.entrypoints=web"
+      - "traefik.http.routers.comunicaciones.middlewares=quitar-comunicaciones"
+      - "traefik.http.middlewares.quitar-comunicaciones.stripprefix.prefixes=/ms-comunicaciones"
+      - "traefik.http.services.comunicaciones.loadbalancer.server.port=3005"
+
+volumes:
+  mongo_data:
+  redis_data:

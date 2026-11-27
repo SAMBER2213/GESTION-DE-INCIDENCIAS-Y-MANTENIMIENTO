@@ -1,0 +1,14 @@
+[
+  {
+    "titulo": "Corte de agua programado",
+    "mensaje": "El sábado de 8 a. m. a 12 m. no habrá agua por mantenimiento del tanque",
+    "fecha_inicio": "2026-11-28",
+    "fecha_fin": "2026-11-29"
+  },
+  {
+    "titulo": "Mantenimiento del ascensor",
+    "mensaje": "El ascensor de la torre A estará fuera de servicio el lunes",
+    "fecha_inicio": "2026-11-30",
+    "fecha_fin": "2026-11-30"
+  }
+]
