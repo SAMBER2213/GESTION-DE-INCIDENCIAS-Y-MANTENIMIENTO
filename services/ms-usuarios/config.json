@@ -1,0 +1,11 @@
+{
+  "nombre": "ms-usuarios",
+  "puerto": 3001,
+  "recurso": "usuarios",
+  "baseDeDatos": "usuarios_db",
+  "camposRequeridos": [
+    "nombre",
+    "correo",
+    "rol"
+  ]
+}

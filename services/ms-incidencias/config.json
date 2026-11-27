@@ -1,0 +1,11 @@
+{
+  "nombre": "ms-incidencias",
+  "puerto": 3002,
+  "recurso": "incidencias",
+  "baseDeDatos": "incidencias_db",
+  "camposRequeridos": [
+    "titulo",
+    "descripcion",
+    "ubicacion"
+  ]
+}

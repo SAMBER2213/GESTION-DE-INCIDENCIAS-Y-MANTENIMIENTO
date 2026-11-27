@@ -4,7 +4,7 @@
 - **Fecha:** 2026-11-14
 
 ## Contexto
-El sistema reúne capacidades de negocio distintas: identidad y acceso, gestión de incidencias, proveedores y contratistas, finanzas y presupuesto, y comunicación con la comunidad. El Event Storming (ver `docs/EventStorming/event-storming-completo.md`) identificó cinco Bounded Contexts con lenguaje propio y reglas que casi no se cruzan. El término «Técnico» tiene un significado distinto en tres de ellos (quien repara, contratista con documentos, usuario con rol), lo que confirma los límites. Hay que decidir cómo se dividen esas capacidades en unidades que se desarrollen, desplieguen y evolucionen por separado.
+El sistema reúne capacidades de negocio distintas: identidad y acceso, gestión de incidencias, proveedores y contratistas, finanzas y presupuesto, y comunicación con la comunidad. El Event Storming (ver `docs/EventStorming/event-storming.md`) identificó cinco Bounded Contexts con lenguaje propio y reglas que casi no se cruzan. El término «Técnico» tiene un significado distinto en tres de ellos (quien repara, contratista con documentos, usuario con rol), lo que confirma los límites. Hay que decidir cómo se dividen esas capacidades en unidades que se desarrollen, desplieguen y evolucionen por separado.
 
 ## Decisión
 Dividir el sistema en **cinco microservicios**, uno por Bounded Context (`ms-usuarios`, `ms-incidencias`, `ms-proveedores`, `ms-finanzas`, `ms-comunicaciones`), más una capa API (`api-bff`) que sirve el frontend y orquesta a los microservicios (ver ADR-0005). Cada servicio es dueño de sus datos (ver ADR-0006).

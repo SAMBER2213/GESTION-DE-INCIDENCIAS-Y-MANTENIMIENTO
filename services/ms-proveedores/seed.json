@@ -1,0 +1,12 @@
+[
+  {
+    "nombre": "Electricos del Valle",
+    "especialidad": "Eléctrica",
+    "activo": true
+  },
+  {
+    "nombre": "Plomeria Express",
+    "especialidad": "Plomería",
+    "activo": true
+  }
+]

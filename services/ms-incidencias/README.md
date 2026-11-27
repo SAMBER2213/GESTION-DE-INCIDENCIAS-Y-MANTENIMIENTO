@@ -15,7 +15,7 @@ Base de datos lógica: `incidencias_db` (MongoDB Atlas, ADR-0006). Colecciones:
 
 - `incidencias`: datos del reporte, estado, referencias a usuarios (`reportado_por`, `tecnico_id`) con copia del nombre, fotos, evidencia y `historial_estados`
 
-El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming-completo.md).
+El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming.md).
 
 ## Operaciones
 
@@ -46,3 +46,11 @@ No llama a ningún otro servicio.
 - Credenciales del servicio externo de imágenes (RT-15)
 
 Cada servicio publica un `.env.example` y los archivos `.env` se excluyen con `.gitignore` (RNF-06).
+
+## Tecnología definida (ADR-0012)
+
+- **Lenguaje y framework:** Node.js + Express.
+- **Responsabilidad que justifica el stack:** Incidencias, historial y recepción de fotos.
+- **Librerías:** express, mongoose, multer, Cloudinary, dotenv.
+- **Base lógica:** MongoDB, base lógica propia del servicio; Mongoose para Node.js o Motor/Pydantic para Python.
+- **Arranque en Docker/Render:** `node server.js`.

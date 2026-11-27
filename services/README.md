@@ -2,14 +2,14 @@
 
 Cada carpeta es una unidad que se desarrolla, prueba y despliega por separado.
 
-| Carpeta | Bounded Context |
-|---------|-----------------|
-| [`api-bff/`](api-bff/) | Capa de API: entrada única, seguridad y orquestación |
-| [`ms-usuarios/`](ms-usuarios/) | Identidad y Acceso |
-| [`ms-incidencias/`](ms-incidencias/) | Gestión de Incidencias |
-| [`ms-proveedores/`](ms-proveedores/) | Proveedores y Contratistas |
-| [`ms-finanzas/`](ms-finanzas/) | Finanzas y Presupuesto |
-| [`ms-comunicaciones/`](ms-comunicaciones/) | Comunicación y Avisos |
+| Carpeta | Bounded Context | Tecnología |
+|---------|-----------------|------------|
+| [`api-bff/`](api-bff/) | Capa de API: entrada única, seguridad y orquestación | Node.js + Express |
+| [`ms-usuarios/`](ms-usuarios/) | Identidad y Acceso | Node.js + Express |
+| [`ms-incidencias/`](ms-incidencias/) | Gestión de Incidencias | Node.js + Express |
+| [`ms-proveedores/`](ms-proveedores/) | Proveedores y Contratistas | Python + FastAPI |
+| [`ms-finanzas/`](ms-finanzas/) | Finanzas y Presupuesto | Python + FastAPI |
+| [`ms-comunicaciones/`](ms-comunicaciones/) | Comunicación y Avisos | Python + FastAPI |
 
 Reglas comunes:
 

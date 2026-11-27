@@ -1,0 +1,10 @@
+{
+  "nombre": "ms-proveedores",
+  "puerto": 3003,
+  "recurso": "proveedores",
+  "baseDeDatos": "proveedores_db",
+  "camposRequeridos": [
+    "nombre",
+    "especialidad"
+  ]
+}

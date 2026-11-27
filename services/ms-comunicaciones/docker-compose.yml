@@ -1,0 +1,29 @@
+# Entorno aislado de ms-comunicaciones: solo este servicio y su base de datos Redis.
+# Uso: docker compose up -d --build   (desde esta carpeta)
+name: ms-comunicaciones-solo
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  ms-comunicaciones:
+    build: .
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "5005:3005"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  redis_data:

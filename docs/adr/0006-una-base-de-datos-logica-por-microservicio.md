@@ -4,7 +4,7 @@
 - **Fecha:** 2026-11-14
 
 ## Contexto
-Cada microservicio debe ser dueño de sus datos; si comparten tablas o colecciones, un cambio en un modelo rompe a los demás y se pierde la independencia. A la vez, todos los servicios del proyecto deben tener plan gratuito (RT-23) y el ADR-0002 eligió MongoDB Atlas con Mongoose.
+Cada microservicio debe ser dueño de sus datos; si comparten tablas o colecciones, un cambio en un modelo rompe a los demás y se pierde la independencia. A la vez, todos los servicios del proyecto deben tener plan gratuito (RT-23) y el ADR-0002 eligió MongoDB Atlas. Los servicios Node.js acceden con Mongoose y los servicios Python con Motor (ADR-0012).
 
 ## Decisión
 Usar **un único clúster de MongoDB Atlas** con **una base de datos lógica por servicio**: `usuarios_db`, `incidencias_db`, `proveedores_db`, `finanzas_db` y `comunicaciones_db`. Cada servicio tiene su propio usuario de base de datos con permisos solo sobre la suya (RT-20) y su propia variable `MONGODB_URI`.
@@ -17,7 +17,7 @@ Entre servicios no hay consultas cruzadas ni `populate`: las referencias son ide
 
 ## Consecuencias
 - (+) Cada servicio controla su modelo y puede cambiarlo sin coordinar con los demás.
-- (+) Se mantiene el costo en cero (RT-23) y se conserva Mongoose (ADR-0002).
+- (+) Se mantiene el costo en cero (RT-23) y se conservan Mongoose para Node.js y Motor para Python (ADR-0002).
 - (+) El usuario de base de datos por servicio impide, por permisos, que un servicio lea los datos de otro.
 - (-) Todos los servicios comparten los límites de almacenamiento y de conexiones del plan gratuito del clúster.
 - (-) No hay *joins*: las lecturas que combinan datos (por ejemplo, el costo total de una incidencia) se componen en `api-bff`.

@@ -1,0 +1,16 @@
+[
+  {
+    "titulo": "Bombillo dañado en el pasillo",
+    "descripcion": "No enciende la luz del piso 3",
+    "ubicacion": "Torre A, piso 3",
+    "estado": "Pendiente",
+    "prioridad": "Media"
+  },
+  {
+    "titulo": "Filtración en el parqueadero",
+    "descripcion": "Gotea agua del techo",
+    "ubicacion": "Sótano 1",
+    "estado": "En proceso",
+    "prioridad": "Alta"
+  }
+]

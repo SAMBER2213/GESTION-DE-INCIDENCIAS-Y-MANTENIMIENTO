@@ -1,0 +1,12 @@
+[
+  {
+    "incidencia_id": "incidencia-demo-1",
+    "concepto": "repuestos",
+    "monto": 85000
+  },
+  {
+    "incidencia_id": "incidencia-demo-2",
+    "concepto": "mano de obra",
+    "monto": 150000
+  }
+]

@@ -15,7 +15,7 @@ Base de datos lógica: `proveedores_db` (MongoDB Atlas, ADR-0006). Colecciones:
 - `proveedores`: datos del proveedor con `documentos` y `calificaciones` anidados
 - `ordenes_servicio`: orden con tareas, referencia al proveedor y a la incidencia (opcional)
 
-El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming-completo.md).
+El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming.md).
 
 ## Operaciones
 
@@ -43,3 +43,11 @@ No llama a ningún otro servicio.
 - `MONGODB_URI` (de `proveedores_db`)
 
 Cada servicio publica un `.env.example` y los archivos `.env` se excluyen con `.gitignore` (RNF-06).
+
+## Tecnología definida (ADR-0012)
+
+- **Lenguaje y framework:** Python 3.12 + FastAPI.
+- **Responsabilidad que justifica el stack:** Reglas de proveedores, vigencia de ARL/EPS y órdenes de servicio.
+- **Librerías:** fastapi, uvicorn, motor, pydantic, python-dotenv.
+- **Base lógica:** MongoDB, base lógica propia del servicio; Mongoose para Node.js o Motor/Pydantic para Python.
+- **Arranque en Docker/Render:** `uvicorn main:app --host 0.0.0.0 --port $PORT`.

@@ -7,9 +7,9 @@ Definen las tecnologías, herramientas y restricciones con las que se construye 
 | ID | Área | Requerimiento |
 |----|------|---------------|
 | RT-01 | Frontend | La interfaz se desarrolla con HTML, CSS y JavaScript (sin frameworks). |
-| RT-02 | Servicios | Cada microservicio y la capa API (`api-bff`) se desarrollan con Node.js y el framework Express. |
+| RT-02 | Servicios | `api-bff`, `ms-usuarios` y `ms-incidencias` usan Node.js + Express; `ms-proveedores`, `ms-finanzas` y `ms-comunicaciones` usan Python 3.12 + FastAPI (ADR-0012). |
 | RT-03 | Base de datos | Se utiliza MongoDB como base de datos, alojada en MongoDB Atlas, con una base de datos lógica por microservicio dentro de un mismo clúster (ADR-0006). |
-| RT-04 | Base de datos | El acceso a MongoDB se realiza mediante Mongoose, con un modelo por entidad dentro del microservicio dueño: Usuario (`ms-usuarios`), Incidencia (`ms-incidencias`), Proveedor y OrdenServicio (`ms-proveedores`), Gasto y Presupuesto (`ms-finanzas`), Aviso y Notificacion (`ms-comunicaciones`). |
+| RT-04 | Base de datos | El acceso a MongoDB se realiza mediante Mongoose en los servicios Node.js y Motor en los servicios Python. Pydantic valida los datos de entrada y salida en Python. Cada servicio define los modelos de sus entidades: Usuario, Incidencia, Proveedor, OrdenServicio, Gasto, Presupuesto, Aviso y Notificacion. |
 | RT-05 | Despliegue | Cada microservicio y la capa API se despliegan como servicios independientes en Render, conectados al repositorio de GitHub. |
 | RT-06 | Control de versiones | El código y la documentación se alojan en un único repositorio de GitHub. |
 
@@ -27,21 +27,29 @@ Definen las tecnologías, herramientas y restricciones con las que se construye 
 
 | ID | Área | Requerimiento |
 |----|------|---------------|
-| RT-12 | Seguridad | `bcrypt` para cifrar contraseñas y `jsonwebtoken` para la autenticación con tokens. |
-| RT-13 | Configuración | `dotenv` para cargar variables de entorno; el archivo `.env` queda excluido con `.gitignore`. |
+| RT-12 | Seguridad | `bcrypt` para el hash de contraseñas y `jsonwebtoken` para JWT en `ms-usuarios`; `api-bff` verifica firma y rol. |
+| RT-13 | Configuración | `dotenv` en Node.js y `python-dotenv` en Python para cargar variables; los archivos `.env` se excluyen con `.gitignore`. |
 | RT-14 | Archivos | `multer` en `ms-incidencias` para recibir las fotos de las incidencias. |
 | RT-15 | Archivos | Las fotos se almacenan en un servicio externo (por ejemplo, Cloudinary), porque el disco de Render no es persistente en el plan gratuito. |
-| RT-16 | Notificaciones | `nodemailer` para enviar notificaciones por correo electrónico. |
+| RT-16 | Notificaciones | `smtplib` o `aiosmtplib` en `ms-comunicaciones` (Python) para enviar correos. |
 | RT-17 | Comunicación | `cors` configurado en `api-bff`, solo si el frontend se sirve desde otro dominio. |
 
 ## Configuración y entorno
 
 | ID | Área | Requerimiento |
 |----|------|---------------|
-| RT-18 | Entorno | Node.js en una versión LTS vigente. |
+| RT-18 | Entorno | Node.js 20 para servicios Express y Python 3.12 para servicios FastAPI. |
 | RT-19 | Variables de entorno | Cada servicio define `PORT`; cada microservicio con base de datos define su propia `MONGODB_URI`. `ms-usuarios` y `api-bff` comparten `JWT_SECRET`; `api-bff` define además las URL de los microservicios; `ms-comunicaciones` define las credenciales del servicio de correo y `ms-incidencias` las del servicio de imágenes. |
 | RT-20 | Base de datos | En MongoDB Atlas se configura un usuario con contraseña segura por servicio, con permisos solo sobre su base de datos, y el acceso de red necesario para que Render pueda conectarse. |
-| RT-21 | Despliegue | Render usa `npm install` como comando de construcción y `node server.js` como comando de inicio, ejecutados desde la carpeta de cada servicio (`services/<nombre>`). |
+| RT-21 | Despliegue | En Render, los servicios Node usan `npm install` y `node server.js`; los Python usan `pip install -r requirements.txt` y `uvicorn main:app --host 0.0.0.0 --port $PORT`, desde su carpeta `services/<nombre>`. |
+
+
+## Restricciones
+
+| ID | Área | Requerimiento |
+|----|------|---------------|
+| RT-22 | Alcance | En esta fase no se incluye el módulo de mantenimiento programado (calendario de equipos críticos, hojas de vida de maquinaria y alertas de inspección). |
+| RT-23 | Costos | Todos los servicios utilizados deben tener plan gratuito (Render, MongoDB Atlas, Cloudinary). |
 
 ## Microservicios
 
@@ -50,10 +58,5 @@ Definen las tecnologías, herramientas y restricciones con las que se construye 
 | RT-24 | Datos | Cada microservicio es dueño de sus datos: ningún otro servicio lee ni modifica su base de datos; el acceso es solo a través de su API (ADR-0006). |
 | RT-25 | Integración | Los microservicios no se llaman entre sí; la coordinación entre ellos se realiza en `api-bff` (ADR-0005). |
 | RT-26 | Capa API | `api-bff` verifica el token JWT y el rol, orquesta los casos de uso que cruzan servicios y compone las lecturas; no contiene lógica de negocio ni base de datos. |
-
-## Restricciones
-
-| ID | Área | Requerimiento |
-|----|------|---------------|
-| RT-22 | Alcance | En esta fase no se incluye el módulo de mantenimiento programado (calendario de equipos críticos, hojas de vida de maquinaria y alertas de inspección). |
-| RT-23 | Costos | Todos los servicios utilizados deben tener plan gratuito (Render, MongoDB Atlas, Cloudinary). |
+| RT-27 | Arquitectura políglota | El sistema usa exactamente dos lenguajes: Node.js + Express y Python + FastAPI, distribuidos según ADR-0012. |
+| RT-28 | Contenedores | Cada servicio tiene su Dockerfile y el `docker-compose.yml` raíz levanta el entorno local con Docker Compose (ADR-0011). |

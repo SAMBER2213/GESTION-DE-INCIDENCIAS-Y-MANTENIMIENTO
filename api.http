@@ -1,0 +1,80 @@
+### Pruebas con la extension REST Client de Visual Studio Code
+### Haga clic en "Send Request" sobre cada linea GET o POST.
+### Todas las peticiones entran por el proxy (puerto 9080).
+
+### api-bff: ping
+GET http://localhost:9080/api/ping
+
+### api-bff: salud de todos los microservicios
+GET http://localhost:9080/api/health
+
+### api-bff: lectura compuesta (incidencias + finanzas + avisos)
+GET http://localhost:9080/api/resumen
+
+### ms-usuarios: ping y salud
+GET http://localhost:9080/ms-usuarios/ping
+
+###
+GET http://localhost:9080/ms-usuarios/health
+
+### ms-usuarios: listar
+GET http://localhost:9080/ms-usuarios/usuarios
+
+### ms-incidencias: ping, salud y lista
+GET http://localhost:9080/ms-incidencias/ping
+
+###
+GET http://localhost:9080/ms-incidencias/health
+
+###
+GET http://localhost:9080/ms-incidencias/incidencias
+
+### ms-incidencias: reportar una incidencia (A-06)
+POST http://localhost:9080/ms-incidencias/incidencias
+Content-Type: application/json
+
+{
+  "titulo": "Ascensor detenido",
+  "descripcion": "El ascensor de la torre B no sube del piso 2",
+  "ubicacion": "Torre B",
+  "estado": "Pendiente",
+  "prioridad": "Alta"
+}
+
+### ms-incidencias: error esperado (faltan campos obligatorios, responde 400)
+POST http://localhost:9080/ms-incidencias/incidencias
+Content-Type: application/json
+
+{
+  "titulo": "Incidencia incompleta"
+}
+
+### ms-proveedores
+GET http://localhost:9080/ms-proveedores/proveedores
+
+### ms-finanzas: listar y registrar un gasto
+GET http://localhost:9080/ms-finanzas/gastos
+
+###
+POST http://localhost:9080/ms-finanzas/gastos
+Content-Type: application/json
+
+{
+  "incidencia_id": "incidencia-demo-1",
+  "concepto": "repuestos",
+  "monto": 42000
+}
+
+### ms-comunicaciones (Python y Redis): listar y publicar un aviso (A-15)
+GET http://localhost:9080/ms-comunicaciones/avisos
+
+###
+POST http://localhost:9080/ms-comunicaciones/avisos
+Content-Type: application/json
+
+{
+  "titulo": "Reunion de copropietarios",
+  "mensaje": "El jueves a las 7 p. m. en el salon comunal",
+  "fecha_inicio": "2026-12-03",
+  "fecha_fin": "2026-12-03"
+}

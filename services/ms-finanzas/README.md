@@ -15,7 +15,7 @@ Base de datos lógica: `finanzas_db` (MongoDB Atlas, ADR-0006). Colecciones:
 - `gastos`: gasto con referencia a la incidencia
 - `presupuestos`: presupuesto por año con indicador de vigencia
 
-El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming-completo.md).
+El detalle de campos e índices está en la sección «Modelado de datos» de [Event Storming](../../docs/EventStorming/event-storming.md).
 
 ## Operaciones
 
@@ -38,3 +38,11 @@ No llama a ningún otro servicio.
 - `MONGODB_URI` (de `finanzas_db`)
 
 Cada servicio publica un `.env.example` y los archivos `.env` se excluyen con `.gitignore` (RNF-06).
+
+## Tecnología definida (ADR-0012)
+
+- **Lenguaje y framework:** Python 3.12 + FastAPI.
+- **Responsabilidad que justifica el stack:** Gastos, presupuesto y cálculos de ejecución.
+- **Librerías:** fastapi, uvicorn, motor, pydantic, python-dotenv.
+- **Base lógica:** MongoDB, base lógica propia del servicio; Mongoose para Node.js o Motor/Pydantic para Python.
+- **Arranque en Docker/Render:** `uvicorn main:app --host 0.0.0.0 --port $PORT`.

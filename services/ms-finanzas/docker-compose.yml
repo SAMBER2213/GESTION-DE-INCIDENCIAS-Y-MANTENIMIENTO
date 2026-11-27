@@ -1,0 +1,30 @@
+# Entorno aislado de ms-finanzas: solo este servicio y su base de datos.
+# Uso: docker compose up -d --build   (desde esta carpeta)
+name: ms-finanzas-solo
+
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  ms-finanzas:
+    build: .
+    environment:
+      PORT: "3004"
+      MONGODB_URI: mongodb://mongo:27017/finanzas_db
+    ports:
+      - "5004:3004"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
